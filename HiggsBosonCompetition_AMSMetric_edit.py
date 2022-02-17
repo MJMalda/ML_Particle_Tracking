@@ -20,12 +20,12 @@ def create_solution_dictionary(solution):
     Solution file headers: EventId, Label, Weight """
     
     solnDict = {}
-    with open(solution, 'rb') as f:
+    with open(solution, 'r') as f:
         soln = csv.reader(f)
-        soln.next() # header
+        next(soln) # header
         for row in soln:
             if row[0] not in solnDict:
-                solnDict[row[0]] = (row[1], row[2])
+                solnDict[row[0]] = (row[31], row[32])
     return solnDict
 
         
@@ -35,11 +35,11 @@ def check_submission(submission, Nelements):
         2. All numbers are unqiue
     """
     rankOrderSet = set()    
-    with open(submission, 'rb') as f:
+    with open(submission, 'r') as f:
         sub = csv.reader(f)
-        sub.next() # header
+        next(sub) # header
         for row in sub:
-            rankOrderSet.add(row[1])
+            rankOrderSet.add(row[0])
             
     if len(rankOrderSet) != Nelements:
         print('RankOrder column must contain unique values')
@@ -73,7 +73,7 @@ def AMS_metric(solution, submission):
     Submission File header: EventId, RankOrder, Class
     """
     
-    numEvents = 550000 # number of events = size of test set
+    numEvents = 200 # number of events = size of test set
     
     # solutionDict: key=eventId, value=(label, class)
     solutionDict = create_solution_dictionary(solution)
@@ -81,17 +81,18 @@ def AMS_metric(solution, submission):
     signal = 0.0
     background = 0.0
     if check_submission(submission, numEvents):
-        with open(submission, 'rb') as f:
+        with open(submission, 'r') as f:
             sub = csv.reader(f)
-            sub.next() # header row
+            next(sub) # header row
             for row in sub:
-                if row[2] == 's': # only events predicted to be signal are scored
-                    if solutionDict[row[0]][0] == 's':
-                        signal += float(solutionDict[row[0]][1])
-                    elif solutionDict[row[0]][0] == 'b':
-                        background += float(solutionDict[row[0]][1])
+                if row[1] == 's': # only events predicted to be signal are scored
+                    if solutionDict[row[0]][1] == 's':
+                        signal += float(solutionDict[row[0]][0])
+                    elif solutionDict[row[0]][1] == 'b':
+                        background += float(solutionDict[row[0]][0])
      
-        print('signal = {0}, background = {1}').format(signal, background)
+        print(f'signal = {signal}')
+        print(f'background = {background}')
         print('AMS = ' + str(AMS(signal, background)))
 
 
@@ -99,8 +100,8 @@ if __name__ == "__main__":
 
     # enter path and file names here    
     path = ""
-    solutionFile = "training_0_201.xlsx"
-    submissionFile = "pred_0_201.xlsx"
+    solutionFile = "Training_data/training_0_201.csv"
+    submissionFile = "pred_0_201.csv"
     
     AMS_metric(solutionFile, submissionFile)
     
