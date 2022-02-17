@@ -12,6 +12,8 @@ import os
 import csv
 import math
 
+from numpy import arange
+
 
 def create_solution_dictionary(solution):
     """ Read solution file, return a dictionary with key EventId and value (weight,label).
@@ -40,10 +42,10 @@ def check_submission(submission, Nelements):
             rankOrderSet.add(row[1])
             
     if len(rankOrderSet) != Nelements:
-        print 'RankOrder column must contain unique values'
+        print('RankOrder column must contain unique values')
         exit()
-    elif rankOrderSet.isdisjoint(set(xrange(1,Nelements+1))) == False:
-        print 'RankOrder column must contain all numbers from [1..NTestSset]'
+    elif rankOrderSet.isdisjoint(set(arange(1,Nelements+1))) == False:
+        print('RankOrder column must contain all numbers from [1..NTestSset]')
         exit()
     else:
         return True
@@ -59,7 +61,7 @@ def AMS(s, b):
     br = 10.0
     radicand = 2 *( (s+b+br) * math.log (1.0 + s/(b+br)) -s)
     if radicand < 0:
-        print 'radicand is negative. Exiting'
+        print('radicand is negative. Exiting')
         exit()
     else:
         return math.sqrt(radicand)
@@ -89,16 +91,16 @@ def AMS_metric(solution, submission):
                     elif solutionDict[row[0]][0] == 'b':
                         background += float(solutionDict[row[0]][1])
      
-        print 'signal = {0}, background = {1}'.format(signal, background)
-        print 'AMS = ' + str(AMS(signal, background))
+        print('signal = {0}, background = {1}').format(signal, background)
+        print('AMS = ' + str(AMS(signal, background)))
 
 
 if __name__ == "__main__":
 
     # enter path and file names here    
     path = ""
-    solutionFile = ""
-    submissionFile = ""
+    solutionFile = "training_0_201.xlsx"
+    submissionFile = "pred_0_201.xlsx"
     
     AMS_metric(solutionFile, submissionFile)
     
