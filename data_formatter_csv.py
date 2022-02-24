@@ -5,8 +5,8 @@ import os
 # print(chardet.detect(open('Training_data/training_0_201.csv', 'rb').read())['encoding'])
 
 def inputs(training_file):
-    df = pd.read_csv(training_file)
-    df = df.iloc[:15000]
+    df = pd.read_csv(training_file, dtype={'PRI_jet_num':'int8'},nrows=10000)
+    # df = df.iloc[:50000]
     labels = df['Label'].to_numpy()
     label = []
     for i in range(len(labels)):
@@ -27,4 +27,4 @@ def inputs(training_file):
     # print(label)
     return jugular, label
 
-inputs('Training_data/training_0_201.csv')
+# inputs('Training_data/training_0_201.csv')
